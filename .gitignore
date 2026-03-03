@@ -1,1 +1,4 @@
-wasmtime
+wasi-sdk-30.0-x86_64-linux
+wasi-sdk-20.0+threads
+wasm-micro-runtime
+*.wasm
