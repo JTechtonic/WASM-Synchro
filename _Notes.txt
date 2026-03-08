@@ -22,11 +22,14 @@ export WASI_SDK_PATH=wasi-sdk-30.0-x86_64-linux
 export WASI_SDK_PATH=wasi-sdk-20.0+threads
 export WAMR_PATH=wasm-micro-runtime/product-mini/platforms/linux/build
 
+// All in one line
+export WASI_SDK_PATH=wasi-sdk-20.0+threads && export WAMR_PATH=wasm-micro-runtime/product-mini/platforms/linux/build
+
 // basic compile command
 $WASI_SDK_PATH/bin/clang --sysroot $WASI_SDK_PATH/share/wasi-sysroot -O2 example.c -o example.wasm
 
 // main compile command
-$WASI_SDK_PATH/bin/clang --sysroot $WASI_SDK_PATH/share/wasi-sysroot --target=wasm32-wasi-threads -pthread -Wl,--import-memory,--export-memory,--max-memory=67108864 example.c -o example.wasm
+$WASI_SDK_PATH/bin/clang --sysroot $WASI_SDK_PATH/share/wasi-sysroot --target=wasm32-wasi-threads -pthread -Wl,--import-memory,--export-memory,--max-memory=67108864 main.c -o main.wasm
 
 //basic run command
-$WAMR_PATH/iwasm example.wasm
+$WAMR_PATH/iwasm main.wasm
