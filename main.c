@@ -1,68 +1,40 @@
 #include <stdio.h>
 #include <pthread.h>
 #include <string.h>
-#include <stdbool.h>
-#include <stdatomic.h>
 
-void initAtomics();
+#include "spinlock.h"
 
-#define SPINLOCK_LOCKED 1
-#define SPINLOCK_UNLOCKED 0
-
-_Atomic int* global_spinlock;
-
-#define NUM_THREADS 10 // Adjust --max-threads=N flag to match this
+#define NUM_THREADS 9 // Adjust --max-threads=N flag to match this
+#define LOOP_AMT 100000
 
 int counter = 0;
 
-bool atomic_test_and_set(_Atomic int* spinlock)
+
+void *normalSpinlockRoutine(void *arg)
 {
-	int free = SPINLOCK_UNLOCKED;
-	int locked = SPINLOCK_LOCKED;
-
-	// Checks to see if spinlock is free; if it is free then make it locked
-	bool obtainedLock = atomic_compare_exchange_strong(spinlock, &free, locked);
-
-	// Returns true if the spinlock used to be free and is now locked; false otherwise
-    return obtainedLock;
-}
-
-void spinlock_lock(_Atomic int* spinlock)
-{
-	while (!atomic_test_and_set(spinlock)) {};
-}
-
-void spinlock_unlock(_Atomic int* spinlock)
-{
-	*spinlock = SPINLOCK_UNLOCKED;
-}
-
-
-void *thread_routine(void *arg)
-{
-	//spinlock_lock(global_spinlock);
-	for (int i = 0; i < 1000000; i++)
+	for (int i = 0; i < LOOP_AMT; i++)
 	{
 		spinlock_lock(global_spinlock);
 		counter++;
 		spinlock_unlock(global_spinlock);
 	}
-	//spinlock_unlock(global_spinlock);
 
 	return NULL;
 }
 
 int main()
 {
-	initAtomics();
+	initSpinlocks();
 
 	pthread_t threads[NUM_THREADS];
 	for (int i = 0; i < NUM_THREADS; i++)
 	{
-		int ret = pthread_create(&threads[i], NULL, thread_routine, NULL);
-    	if (ret)
-      		printf("failed to spawn thread: %d\n", ret);
+		int ret = pthread_create(&(threads[i]), NULL, normalSpinlockRoutine, NULL);
+		
 
+
+    	if (ret)
+      		printf("failed to spawn thread #%d\n", i);
   	}
 
   	for (int i = 0; i < NUM_THREADS; i++)
@@ -71,12 +43,6 @@ int main()
   	}
 
 	printf("%d\n", counter);
-	printf("Is supposed to be: %d\n", NUM_THREADS * 1000000);
+	printf("Is supposed to be: %d\n", NUM_THREADS * LOOP_AMT);
 	return 0;
-}
-
-void initAtomics()
-{
-	atomic_init(global_spinlock, SPINLOCK_UNLOCKED);
-	//wasm_cluster_set_max_thread_num(100);
 }
