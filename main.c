@@ -6,7 +6,7 @@
 #include "yieldSpinlock.h"
 #include "blockMutex.h"
 
-#define NUM_THREADS 11 // Adjust --max-threads=N flag to match this
+#define NUM_THREADS 8 // Adjust --max-threads=N flag to match this
 #define LOOP_AMT 10000
 
 // Dev definition to change which lock to use
@@ -83,6 +83,7 @@ int main()
 	pthread_t threads[NUM_THREADS];
 	for (int i = 0; i < NUM_THREADS; i++)
 	{
+		//__wasi_thread_spawn() //Look into using this for spawning threads	
 		int ret = pthread_create(&(threads[i]), NULL, normalSpinlockRoutine, NULL);
 		
     	if (ret)
