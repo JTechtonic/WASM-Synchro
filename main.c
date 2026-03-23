@@ -3,9 +3,14 @@
 #include <string.h>
 
 #include "spinlock.h"
+#include "yieldSpinlock.h"
+#include "blockMutex.h"
 
-#define NUM_THREADS 9 // Adjust --max-threads=N flag to match this
-#define LOOP_AMT 100000
+#define NUM_THREADS 11 // Adjust --max-threads=N flag to match this
+#define LOOP_AMT 10000
+
+// Dev definition to change which lock to use
+#define LOCK_METHOD 2
 
 int counter = 0;
 
@@ -14,9 +19,45 @@ void *normalSpinlockRoutine(void *arg)
 {
 	for (int i = 0; i < LOOP_AMT; i++)
 	{
-		spinlock_lock(global_spinlock);
+		//spinlock_lock();
+		//yieldSpinlock_lock();
+		//blockMutex_lock();
+
+		switch (LOCK_METHOD)
+		{
+			case 0:
+				spinlock_lock();
+				break;
+
+			case 1:
+				yieldSpinlock_lock();
+				break;
+
+			case 2:
+				blockMutex_lock();
+				break;
+		}
+
 		counter++;
-		spinlock_unlock(global_spinlock);
+
+		switch (LOCK_METHOD)
+		{
+			case 0:
+				spinlock_unlock();
+				break;
+
+			case 1:
+				yieldSpinlock_unlock();
+				break;
+
+			case 2:
+				blockMutex_unlock();
+				break;
+		}
+
+		//blockMutex_unlock();
+		//yieldSpinlock_unlock();
+		//spinlock_unlock();
 	}
 
 	return NULL;
@@ -24,15 +65,26 @@ void *normalSpinlockRoutine(void *arg)
 
 int main()
 {
-	initSpinlocks();
+	switch (LOCK_METHOD)
+	{
+		case 0:
+			initSpinlocks();
+			break;
+
+		case 1:
+			initYieldSpinlocks();
+			break;
+
+		case 2:
+			initBlockMutex();
+			break;
+	}
 
 	pthread_t threads[NUM_THREADS];
 	for (int i = 0; i < NUM_THREADS; i++)
 	{
 		int ret = pthread_create(&(threads[i]), NULL, normalSpinlockRoutine, NULL);
 		
-
-
     	if (ret)
       		printf("failed to spawn thread #%d\n", i);
   	}

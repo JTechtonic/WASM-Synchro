@@ -9,9 +9,9 @@
 
 static _Atomic int* global_spinlock;
 
-bool atomic_test_and_set(_Atomic int* spinlock);
-void spinlock_lock(_Atomic int* spinlock);
-void spinlock_unlock(_Atomic int* spinlock);
+bool atomic_test_and_set();
+void spinlock_lock();
+void spinlock_unlock();
 void initSpinlocks();
 
 #endif
