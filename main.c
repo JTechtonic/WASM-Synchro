@@ -6,8 +6,8 @@
 #include "yieldSpinlock.h"
 #include "blockMutex.h"
 
-#define NUM_THREADS 8 // Adjust --max-threads=N flag to match this
-#define LOOP_AMT 10000
+#define NUM_THREADS 11 // Adjust --max-threads=N flag to match this
+#define LOOP_AMT 100000
 
 // Dev definition to change which lock to use
 #define LOCK_METHOD 2

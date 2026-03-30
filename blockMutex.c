@@ -2,10 +2,12 @@
 
 void initBlockMutex()
 {
-	*globalBlockMutex = MUTEX_UNLOCKED;
+	//*globalBlockMutex = MUTEX_UNLOCKED;
+	int free = MUTEX_UNLOCKED;
+	__atomic_store(globalBlockMutex, &free, __ATOMIC_SEQ_CST);
 }
 
-int try_lock()
+bool try_lock()
 {
 	// Use the exposed clang version to do try lock
 	int free = MUTEX_UNLOCKED;
@@ -22,7 +24,9 @@ void blockMutex_lock()
 	while (!try_lock())
 	{
 		// Put the thread to sleep indefinitely if we can't get the lock
-		__builtin_wasm_memory_atomic_wait32(globalBlockMutex, 1, -1);
+		int ret = __builtin_wasm_memory_atomic_wait32(globalBlockMutex, MUTEX_LOCKED, -1);
+		if (ret == 0)
+			printf("Thread awoken");
 	}
 }
 
