@@ -15,7 +15,7 @@
 int counter = 0;
 
 
-void *normalSpinlockRoutine(void *arg)
+void *routine(void *arg)
 {
 	for (int i = 0; i < LOOP_AMT; i++)
 	{
@@ -84,7 +84,7 @@ int main()
 	for (int i = 0; i < NUM_THREADS; i++)
 	{
 		//__wasi_thread_spawn() //Look into using this for spawning threads	
-		int ret = pthread_create(&(threads[i]), NULL, normalSpinlockRoutine, NULL);
+		int ret = pthread_create(&(threads[i]), NULL, routine, NULL);
 		
     	if (ret)
       		printf("failed to spawn thread #%d\n", i);
