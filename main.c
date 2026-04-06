@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <pthread.h>
-#include <string.h>
 
 #include "spinlock.h"
 #include "yieldSpinlock.h"

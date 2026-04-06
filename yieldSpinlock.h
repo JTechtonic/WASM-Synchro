@@ -4,7 +4,7 @@
 #include "spinlock.h"
 #include <sched.h>
 
-static _Atomic int* global_yieldSpinlock;
+static int* global_yieldSpinlock;
 
 void initYieldSpinlocks();
 void yieldSpinlock_lock();

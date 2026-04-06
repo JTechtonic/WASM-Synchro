@@ -24,9 +24,7 @@ void blockMutex_lock()
 	while (!try_lock())
 	{
 		// Put the thread to sleep indefinitely if we can't get the lock
-		int ret = __builtin_wasm_memory_atomic_wait32(globalBlockMutex, MUTEX_LOCKED, -1);
-		if (ret == 0)
-			printf("Thread awoken");
+		/*int ret = */__builtin_wasm_memory_atomic_wait32(globalBlockMutex, MUTEX_LOCKED, -1);
 	}
 }
 
