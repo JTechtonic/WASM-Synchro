@@ -2,11 +2,11 @@
 #define _CONDITIONVARS_H_
 
 #include "blockMutex.h"
-#include <semaphore.h>
+#include "semaphore.h"
 #include <stdlib.h>
 
 typedef struct cond_t {
-	sem_t* semaphore;
+	semaphore* semaphore;
 	int waiters;
 } conditionVar;
 

@@ -4,27 +4,34 @@
 #include <pthread.h>
 #include "conditionVars.h"
 
+/***
+ * TODO: Next work on making a Makefile and organize repo
+ */
+
+
 #define PRODUCER_THREADS 50 // --max-threads must be at minimum 2 times this amount
 
 // Producer/Consumer threads will randomly add/decrease 1 - this amount in counter
 #define RANGE 20 
 
+pthread_barrier_t barrier;
+
 int counter = 0;
 int consumed = 0;
-
-// Look into the following link:
-// https://www.google.com/search?client=opera-gx&q=how+to+implement+condition+variables&sourceid=opera&ie=UTF-8&oe=UTF-8
 
 void *routine(void *args)
 {
 	int isProducer = *((int*)args);
 	int amount = *((int*)args + 1);
+	
+	// To help make sure all threads start at the same time
+	pthread_barrier_wait(&barrier);
 
 	if (isProducer == 1)
 	{
 		blockMutex_lock();
 		counter += amount;
-		printf("Counter is increased to: %d\n", counter);
+		printf("Thread +%d increased counter to: %d\n", amount, counter);
 		blockMutex_unlock();
 		signal();
 	}
@@ -33,11 +40,13 @@ void *routine(void *args)
 		blockMutex_lock();
 		while (!(counter >= amount))
 		{
+			// Debug statement to track threads sleeping
+			//printf("Thread -%d going to sleep because counter (%d) < amount (%d)\n", amount, counter, amount);
 			wait();
 		}
 		counter -= amount;
 		consumed += amount;
-		printf("Counter is decreased to: %d\n", counter);
+		printf("Thread -%d decreased counter to: %d\n", amount, counter);
 		blockMutex_unlock();
 	}
 
@@ -46,10 +55,12 @@ void *routine(void *args)
 
 
 int main()
-{ // Look into making all threads start at the same time with pthread_barrier_t
+{
 	srand(time(NULL));
 
 	initConditionVar();
+
+	pthread_barrier_init(&barrier, NULL, PRODUCER_THREADS * 2);
 
 	pthread_t threads[PRODUCER_THREADS * 2];
 	int totalProduced = 0;
