@@ -2,7 +2,6 @@
 
 void initYieldSpinlocks()
 {
-	//atomic_init(global_yieldSpinlock, SPINLOCK_UNLOCKED);
 	int free = SPINLOCK_UNLOCKED;
 	__atomic_store(global_yieldSpinlock, &free, __ATOMIC_SEQ_CST);
 }
@@ -26,7 +25,6 @@ void yieldSpinlock_lock()
 
 void yieldSpinlock_unlock()
 {
-    //*global_yieldSpinlock = SPINLOCK_UNLOCKED;
 	int free = SPINLOCK_UNLOCKED;
 	__atomic_store(global_yieldSpinlock, &free, __ATOMIC_SEQ_CST);
 }

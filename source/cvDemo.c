@@ -4,11 +4,6 @@
 #include <pthread.h>
 #include "conditionVars.h"
 
-/***
- * TODO: Next work on making a Makefile and organize repo
- */
-
-
 #define PRODUCER_THREADS 50 // --max-threads must be at minimum 2 times this amount
 
 // Producer/Consumer threads will randomly add/decrease 1 - this amount in counter

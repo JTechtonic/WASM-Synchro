@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <pthread.h>
 
 #include "spinlock.h"
@@ -9,7 +10,7 @@
 #define LOOP_AMT 100000
 
 // Dev definition to change which lock to use
-#define LOCK_METHOD 2
+int LOCK_METHOD = 0;
 
 int counter = 0;
 
@@ -18,10 +19,6 @@ void *routine(void *arg)
 {
 	for (int i = 0; i < LOOP_AMT; i++)
 	{
-		//spinlock_lock();
-		//yieldSpinlock_lock();
-		//blockMutex_lock();
-
 		switch (LOCK_METHOD)
 		{
 			case 0:
@@ -53,17 +50,24 @@ void *routine(void *arg)
 				blockMutex_unlock();
 				break;
 		}
-
-		//blockMutex_unlock();
-		//yieldSpinlock_unlock();
-		//spinlock_unlock();
 	}
 
 	return NULL;
 }
 
-int main()
+int main(int argc, char* argv[])
 {
+	// Change lock method depending on command line arg
+	if (argc > 1)
+	{
+		int input = atoi(argv[1]);
+
+		if (input < 0 || input > 2)
+			LOCK_METHOD = 0;
+		else
+			LOCK_METHOD = input;
+	}
+
 	switch (LOCK_METHOD)
 	{
 		case 0:
@@ -82,7 +86,6 @@ int main()
 	pthread_t threads[NUM_THREADS];
 	for (int i = 0; i < NUM_THREADS; i++)
 	{
-		//__wasi_thread_spawn() //Look into using this for spawning threads	
 		int ret = pthread_create(&(threads[i]), NULL, routine, NULL);
 		
     	if (ret)

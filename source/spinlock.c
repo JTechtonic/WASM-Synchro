@@ -9,9 +9,6 @@ bool atomic_test_and_set(int* spinlock)
 	//bool obtainedLock = atomic_compare_exchange_strong(global_spinlock, &free, locked);
 	return __atomic_compare_exchange(spinlock, &free, &locked, false, 
 									__ATOMIC_SEQ_CST, __ATOMIC_SEQ_CST);
-
-	// Returns true if the spinlock used to be free and is now locked; false otherwise
-    //return obtainedLock;
 }
 
 void spinlock_lock()
