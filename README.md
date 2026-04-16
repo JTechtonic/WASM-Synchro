@@ -1,4 +1,4 @@
-This repo is for the semester project for class COP 5611 Operating System Design Principles at the University of Central Florida. I, Jeovan Teixiera, worked on this myself.
+This repo is for the semester project for class COP 5611 Operating System Design Principles at the University of Central Florida. I, Jeovan Teixeira, worked on this myself.
 The basis of the project was to make some synchronization primitives using the WASI SDK and C. As of writing the code compiles and runs using the 20.0+threads version of WASI SDK and the WebAssembly Micro Runtime tool.
 No efforts in containerization have been made, but to have this work on your own machine download the following repositories into the same directory:
 * https://github.com/WebAssembly/wasi-sdk/releases/tag/wasi-sdk-20%2Bthreads
