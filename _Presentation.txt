@@ -1,9 +1,0 @@
-Pathway to presentation
-
-- Make CVs a thing and make sure it works
-- Make Semaphores that will demo the producer-consumer problem
-- Look into making hybrid blocking locks (https://www.google.com/search?client=opera-gx&q=hybrid+blocking+threads&sourceid=opera&ie=UTF-8&oe=UTF-8#cobssid=s)
-- Maybe look into the idea of queue locks
-- Make write up according to this rubric (https://webcourses.ucf.edu/courses/1501091/assignments/9277809)
-- The presentation itself will be a copy of the write up with an added demo section (expected length 15 mins max)
-- Submit write up at the same time as presentation

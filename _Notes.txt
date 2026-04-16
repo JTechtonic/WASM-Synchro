@@ -1,4 +1,4 @@
-//List of WASI SDK releases
+//List of WASI SDK releases <Required>
 https://github.com/WebAssembly/wasi-sdk/releases
 
 // WASI SDK 20+threads
@@ -10,7 +10,7 @@ https://github.com/WebAssembly/wasi-sdk/releases/download/wasi-sdk-20%2Bthreads/
 // Extract
 tar -xvzf wasi-sdk-20.0.threads-linux.tar.gz
 
-// WASM Micro Runtime
+// WASM Micro Runtime <Required>
 https://github.com/bytecodealliance/wasm-micro-runtime/blob/main/product-mini/README.md
 
 
